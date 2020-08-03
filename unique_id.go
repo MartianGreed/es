@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"strings"
 )
 
 // UniqueID is a unique string ID generator
@@ -19,11 +20,27 @@ func Generate(p string) *UniqueID {
 
 	if err != nil {
 		log.Fatalf("%+v\n", err)
+		return nil
 	}
 
 	return &UniqueID{
 		uuid:   uuid,
 		prefix: p,
+	}
+}
+
+// ParseUUIDString takes a string as an input argument and returns a unique id
+func ParseUUIDString(s string) *UniqueID {
+	p := strings.Split(s, "_")
+
+	if len(p) != 2 {
+		log.Fatalf("%s unique ID was not generated properly. Accepted format is 'prefix_generateduuid'", s)
+		return nil
+	}
+
+	return &UniqueID{
+		uuid:   p[1],
+		prefix: p[0],
 	}
 }
 
